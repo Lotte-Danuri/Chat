@@ -9,6 +9,8 @@ import java.util.Optional;
 
 @Repository
 public interface ChatMongoDBRepository extends MongoRepository<Chat,ObjectId> {
+    @Override
+    Optional<Chat> findById(ObjectId objectId);
 
 
 }

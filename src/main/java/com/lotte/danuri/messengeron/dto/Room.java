@@ -13,7 +13,7 @@ public class Room {
     @Id
     private String userId;
 
-    private ArrayList<ObjectId> roomList;
+    private ArrayList<RoomData> roomList;
     private LocalDateTime lastActivity;
 
 }

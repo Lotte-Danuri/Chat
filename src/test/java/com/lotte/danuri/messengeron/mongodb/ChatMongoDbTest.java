@@ -33,10 +33,8 @@ public class ChatMongoDbTest {
 //        Room aRoom = new Room("user_id", ["631ff7772e988a0650362fc4"], "2022-09-12T15:00:00.000+00:00");
 
         // given
-        ObjectId id = new ObjectId("631ff7772e988a0650362fc4");
-        Message message = new Message("type", LocalDateTime.parse("2022-09-13T00:00"), "content", "user_id");
-        Chat chat = new Chat(id, Arrays.asList(), LocalDateTime.parse("2022-09-13T00:00"));
-        assertThat(chatMongoDBRepository.findById(id)).isEqualTo(chat);
+        //ObjectId id = new ObjectId("631ff7772e988a0650362fc4");
+        //assertThat(chatMongoDBRepository.findById(id)).isEqualTo(chat);
         // when
         // then
 

@@ -7,7 +7,9 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.Optional;
 
-@Repository
+
+
 public interface RoomMongoDBRepository extends MongoRepository<Room, String> {
     Optional<ArrayList<Room>> findRoomsByUserIdOrderByLastActivityDesc(String userId);
+    Room findRoomByUserId(String userId);
 }
