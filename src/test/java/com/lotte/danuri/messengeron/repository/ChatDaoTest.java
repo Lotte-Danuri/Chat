@@ -31,12 +31,12 @@ class ChatDaoTest {
     @Test
     public void test(@Autowired MongoTemplate mongoTemplate) {
 
-
+/*
         ArrayList<Message> messageList = new ArrayList<Message>();
         Message message = new Message("message", null, "messageDe", "user_id");
         messageList.add(message);
         Chat chat = new Chat(null, messageList,null );
-        mongoTemplate.insert(chat, "chat");
+        mongoTemplate.insert(chat, "chat");*/
     }
 
     @Test

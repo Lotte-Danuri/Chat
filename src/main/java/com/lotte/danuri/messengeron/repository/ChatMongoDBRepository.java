@@ -1,3 +1,4 @@
+/*
 package com.lotte.danuri.messengeron.repository;
 
 import com.lotte.danuri.messengeron.dto.Chat;
@@ -14,3 +15,4 @@ public interface ChatMongoDBRepository extends MongoRepository<Chat,ObjectId> {
 
 
 }
+*/

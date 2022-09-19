@@ -1,31 +1,16 @@
 package com.lotte.danuri.messengeron.mongodb;
 
-import com.lotte.danuri.messengeron.dto.RoomData;
-import com.lotte.danuri.messengeron.repository.RoomMongoDBRepository;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @DataMongoTest
 @ExtendWith(SpringExtension.class)
 public class RoomMongoDbTest {
 
-    RoomMongoDBRepository roomMongoDBRepository;
 
-    @Autowired
-    public void setRoomMongoDBRepository(RoomMongoDBRepository roomMongoDBRepository) {
-        this.roomMongoDBRepository = roomMongoDBRepository;
-    }
 
     @Test
     public void test() {

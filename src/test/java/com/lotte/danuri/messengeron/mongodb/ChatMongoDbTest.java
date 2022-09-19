@@ -1,31 +1,15 @@
 package com.lotte.danuri.messengeron.mongodb;
 
-import com.lotte.danuri.messengeron.dto.Chat;
-import com.lotte.danuri.messengeron.dto.Message;
-import com.lotte.danuri.messengeron.repository.ChatMongoDBRepository;
-import org.bson.types.ObjectId;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-
-import java.time.LocalDateTime;
-import java.util.Arrays;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @DataMongoTest
 @ExtendWith(SpringExtension.class)
 public class ChatMongoDbTest {
 
-    ChatMongoDBRepository chatMongoDBRepository;
-
-    @Autowired
-    public void setChatMongoDBRepository(ChatMongoDBRepository chatMongoDBRepository) {
-        this.chatMongoDBRepository = chatMongoDBRepository;
-    }
 
     @Test
     public void test() {

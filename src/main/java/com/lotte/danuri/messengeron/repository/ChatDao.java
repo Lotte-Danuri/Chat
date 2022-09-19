@@ -10,6 +10,10 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
+
+import java.util.List;
+
 
 @Repository
 public class ChatDao {
@@ -17,21 +21,39 @@ public class ChatDao {
     @Autowired
     private MongoTemplate mongoTemplate;
 
-    public void createChat(Chat chat) {
-        mongoTemplate.insert(chat, "chat");
+
+    //채팅방 생성 메소드
+    public ObjectId createChat(Chat chat) {
+        return mongoTemplate.insert(chat, "chat").getChatId();
     }
 
     //채팅방에 메세지 삽입하는 메소드
-    public void pushChat(Message message, ObjectId RoomId) {
-        Query query = Query.query(Criteria.where("_jd").is(RoomId));
+    public void pushMessage(Chat chat, Message message) {
+        Query query = Query.query(Criteria.where("_id").is(chat.getChatId()));
 
-        Update update = new Update();
+        Update updateChat = new Update();
+        Update updateMessage = new Update();
 
-        update.push("messageList").each(message);
+        updateChat.set("updateAt", LocalDateTime.now());
+        updateChat.set("lastMessage", message.getContent());
+        updateMessage.push("messageList").each(message);
 
-        mongoTemplate.updateFirst(query, update, "chat");
+        mongoTemplate.updateFirst(query, updateChat,"chat");
+        mongoTemplate.updateFirst(query, updateMessage, "chat");
     }
 
+    //메세지 읽어오는 메소드
+    public List<Message> getMessages(ObjectId roomId){
+        List<Message> messages;
 
+        Query query = Query.query(Criteria.where("_id").is(roomId));
+
+
+        Chat chat =  mongoTemplate.findOne(query,Chat.class,"chat");
+
+        messages = chat.getMessageList();
+
+        return messages;
+    }
 
 }

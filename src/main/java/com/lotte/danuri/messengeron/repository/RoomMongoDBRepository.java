@@ -1,3 +1,4 @@
+/*
 package com.lotte.danuri.messengeron.repository;
 
 import com.lotte.danuri.messengeron.dto.Room;
@@ -15,3 +16,4 @@ public interface RoomMongoDBRepository extends MongoRepository<Room, String> {
 
 //    public String getRoomByUserIdAndRoomList
 }
+*/
