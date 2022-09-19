@@ -12,10 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import java.lang.reflect.Array;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.Objects;
+import java.util.*;
 
 @Repository
 public class RoomDao {
@@ -50,7 +47,9 @@ public class RoomDao {
     }
 
 
-    public RoomData findRoomIdByUserId(String userId, String receiverId) {
+    public List<RoomData> findRoomIdByUserId(String userId, String receiverId) {
+
+        List<RoomData> roomDatas = new ArrayList<>();
 
         Query query = Query.query(
                 Criteria.where(
@@ -64,13 +63,11 @@ public class RoomDao {
 
         while (roomDataLt.hasNext()) {
             RoomData roomData = roomDataLt.next();
-/*
-            if(roomData.getReceiverId().equals(receiverId))
-*/
-            return roomData;
+
+            if(roomData.getReceiverId().equals(receiverId)) roomDatas.add(roomData);
         }
 
-        return null;
+        return roomDatas;
     }
 
     public void deleteRoomData(String userId, RoomData roomData) {
