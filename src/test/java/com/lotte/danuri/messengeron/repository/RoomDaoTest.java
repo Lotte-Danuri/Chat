@@ -69,4 +69,19 @@ class RoomDaoTest {
         updateRoomList.pull("roomList",Query.query(Criteria.where("_id").is(roomData.getRoomId())));
         mongoTemplate.updateFirst(query, updateRoomList, "room");
     }
+
+    @Test
+    public void test3(@Autowired MongoTemplate mongoTemplate){
+
+        Query query = Query.query(
+                Criteria.where(
+                                "userId"
+                        ).is("user_id").and("roomList")
+                        .elemMatch(
+                                Criteria.where("receiverId").is("Test2")
+                                        .and("valid").is(true))
+        );
+
+        mongoTemplate.findOne(query, Chat.class, "chat");
+    }
 }

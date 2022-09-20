@@ -11,7 +11,10 @@ public interface ChatService {
 
     public void pushMessage(Chat chat, Message message);
 
+    public boolean closeChat(ObjectId roomId);
 
     public List<Message> getMessages(ObjectId roomId);
+
+    public boolean validChat(ObjectId roomId);
 
 }

@@ -30,6 +30,8 @@ public class Chat {
 
     private String lastMessage;
 
+    private boolean valid;
+
     private String roomType;
 
 }

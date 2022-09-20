@@ -22,6 +22,16 @@ public class RoomController {
 
     @GetMapping("/room/{userId}/{receiverId}")
     public RoomData findRoomIdByUserId(@PathVariable final String userId, @PathVariable final String receiverId) {
-        return roomService.findRoomId(userId, receiverId);
+        return roomService.findRoomIdByUserId(userId, receiverId);
+    }
+
+    @DeleteMapping("/room/{userId}/")
+    public boolean deleteRoomData(@PathVariable final String userId, @RequestParam final RoomData roomData) {
+        return roomService.deleteRoomData(userId, roomData);
+    }
+
+    @PostMapping("/room")
+    public void createRoom(@RequestParam final String userId) {
+        roomService.createRoom(userId);
     }
 }

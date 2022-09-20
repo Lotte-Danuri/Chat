@@ -22,6 +22,7 @@ public class ChatDao {
     private MongoTemplate mongoTemplate;
 
 
+
     //채팅방 생성 메소드
     public ObjectId createChat(Chat chat) {
         return mongoTemplate.insert(chat, "chat").getChatId();
@@ -42,7 +43,7 @@ public class ChatDao {
         mongoTemplate.updateFirst(query, updateMessage, "chat");
     }
 
-    //메세지 읽어오는 메소드
+    //메세지들을 읽어오는 메소드
     public List<Message> getMessages(ObjectId roomId){
         List<Message> messages;
 
@@ -54,6 +55,23 @@ public class ChatDao {
         messages = chat.getMessageList();
 
         return messages;
+    }
+
+    //방 유효성 확인
+    public boolean validChat(ObjectId chatId){
+        Query query = Query.query(Criteria.where("_id").is(chatId));
+        return mongoTemplate.findOne(query,Chat.class,"chat").isValid();
+    }
+
+    //방 비활성화
+    public boolean closeChat(ObjectId roomId){
+        Query query = Query.query(Criteria.where("_id").is(roomId));
+
+        Update update = new Update();
+
+        update.set("valid", false);
+
+        return mongoTemplate.updateFirst(query, update, "chat").wasAcknowledged();
     }
 
 

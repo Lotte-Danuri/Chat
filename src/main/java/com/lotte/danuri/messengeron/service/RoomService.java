@@ -9,10 +9,14 @@ import java.util.List;
 
 public interface RoomService {
 
-    Room findRoomsByUserId(String userId);
+    Room findRoomsByUserId(String userId);;
 
-    List<RoomData> findRoomId(String userId, String receiverId);
+    RoomData createChatRoom(String userId, String receiverId);
 
-    ObjectId createChatRoom(String userId, String receiverId);
+    boolean deleteRoomData(String userId, RoomData roomData);
+
+    RoomData findRoomIdByUserId(String userId, String receiverId);
+
+    Room createRoom(String userId);
 
     }

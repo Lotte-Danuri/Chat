@@ -28,12 +28,12 @@ public class ChatController {
         ObjectId roomId = chatService.createChat();
 
         //유저에게 주입
-        roomService.createChatRoom(userId, receiverId, roomId);
+        roomService.createChatRoom(userId, receiverId);
     }
 
     @PostMapping("message")
     void pushMessage(Chat chat, Message message) {
-        pushMessage(chat, message);
+        chatService.pushMessage(chat, message);
     }
 
 }
