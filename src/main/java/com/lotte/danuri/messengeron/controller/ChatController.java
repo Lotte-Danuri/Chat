@@ -4,6 +4,7 @@ import com.lotte.danuri.messengeron.dto.Chat;
 import com.lotte.danuri.messengeron.dto.Message;
 import com.lotte.danuri.messengeron.service.ChatService;
 import com.lotte.danuri.messengeron.service.RoomService;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,7 @@ public class ChatController {
     ChatService chatService;
 
     @PostMapping("chat")
+    @ApiOperation(value = "createChatRoom" )
     void createChatRoom(String userId, String receiverId) {
         //빈방 생성
         ObjectId roomId = chatService.createChat();
@@ -32,6 +34,7 @@ public class ChatController {
     }
 
     @PostMapping("message")
+    @ApiOperation(value = "pushMessage")
     void pushMessage(Chat chat, Message message) {
         chatService.pushMessage(chat, message);
     }
