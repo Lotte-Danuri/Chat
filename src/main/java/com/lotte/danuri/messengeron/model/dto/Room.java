@@ -1,4 +1,4 @@
-package com.lotte.danuri.messengeron.dto;
+package com.lotte.danuri.messengeron.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

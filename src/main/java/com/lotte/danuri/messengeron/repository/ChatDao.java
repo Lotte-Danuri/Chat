@@ -1,7 +1,7 @@
 package com.lotte.danuri.messengeron.repository;
 
-import com.lotte.danuri.messengeron.dto.Chat;
-import com.lotte.danuri.messengeron.dto.Message;
+import com.lotte.danuri.messengeron.model.dto.Chat;
+import com.lotte.danuri.messengeron.model.dto.Message;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Repository
@@ -29,8 +30,8 @@ public class ChatDao {
     }
 
     //채팅방에 메세지 삽입하는 메소드
-    public void pushMessage(Chat chat, Message message) {
-        Query query = Query.query(Criteria.where("_id").is(chat.getChatId()));
+    public void pushMessage(ObjectId roomId, Message message) {
+        Query query = Query.query(Criteria.where("_id").is(roomId));
 
         Update updateChat = new Update();
         Update updateMessage = new Update();
@@ -44,15 +45,15 @@ public class ChatDao {
     }
 
     //메세지들을 읽어오는 메소드
-    public List<Message> getMessages(ObjectId roomId){
-        List<Message> messages;
+    public Optional<List<Message>> getMessages(ObjectId roomId){
+
 
         Query query = Query.query(Criteria.where("_id").is(roomId));
 
 
         Chat chat =  mongoTemplate.findOne(query,Chat.class,"chat");
 
-        messages = chat.getMessageList();
+        Optional<List<Message>> messages = Optional.ofNullable(chat.getMessageList());
 
         return messages;
     }
@@ -64,14 +65,14 @@ public class ChatDao {
     }
 
     //방 비활성화
-    public boolean closeChat(ObjectId roomId){
+    public void closeChat(ObjectId roomId){
         Query query = Query.query(Criteria.where("_id").is(roomId));
 
         Update update = new Update();
 
         update.set("valid", false);
 
-        return mongoTemplate.updateFirst(query, update, "chat").wasAcknowledged();
+        mongoTemplate.updateFirst(query, update, "chat");
     }
 
 

@@ -1,11 +1,13 @@
 package com.lotte.danuri.messengeron.controller;
 
-import com.lotte.danuri.messengeron.dto.Room;
-import com.lotte.danuri.messengeron.dto.RoomData;
+import com.lotte.danuri.messengeron.model.dto.RoomData;
 import com.lotte.danuri.messengeron.service.RoomService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
@@ -16,27 +18,27 @@ public class RoomController {
 
     private final RoomService roomService;
 
-    @GetMapping("/rooms/{userId}")
+    @GetMapping("/{userId}")
     @ApiOperation(value = "findRoomsByUserId")
-    public Room findRoomsByUserId(@PathVariable final String userId) {
-        return roomService.findRoomsByUserId(userId);
+    public List<RoomData> findRoomDatasByUserId(@PathVariable final String userId) {
+        return roomService.findRoomDatasByUserId(userId);
     }
 
-    @GetMapping("/room/{userId}/{receiverId}")
+    @GetMapping("/{userId}/{receiverId}")
     @ApiOperation(value = "findRoomIdByUserId")
     public RoomData findRoomIdByUserId(@PathVariable final String userId, @PathVariable final String receiverId) {
         return roomService.findRoomIdByUserId(userId, receiverId);
     }
 
-    @DeleteMapping("/room/{userId}/")
+    @DeleteMapping("/{userId}")
     @ApiOperation(value = "deleteRoomData")
-    public boolean deleteRoomData(@PathVariable final String userId, @RequestParam final RoomData roomData) {
-        return roomService.deleteRoomData(userId, roomData);
+    public void deleteRoomData(@PathVariable final String userId, @RequestParam final ObjectId roomId) {
+        roomService.deleteRoomData(userId, roomId);
     }
 
-    @PostMapping("/room")
-    @ApiOperation(value = "createRoom")
-    public void createRoom(@RequestParam final String userId) {
-        roomService.createRoom(userId);
+    @PostMapping("")
+    @ApiOperation(value = "createUser")
+    public void createUser(String userId) {
+        roomService.createUser(userId);
     }
 }

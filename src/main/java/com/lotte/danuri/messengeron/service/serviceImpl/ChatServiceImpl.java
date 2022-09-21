@@ -1,7 +1,7 @@
 package com.lotte.danuri.messengeron.service.serviceImpl;
 
-import com.lotte.danuri.messengeron.dto.Chat;
-import com.lotte.danuri.messengeron.dto.Message;
+import com.lotte.danuri.messengeron.model.dto.Chat;
+import com.lotte.danuri.messengeron.model.dto.Message;
 import com.lotte.danuri.messengeron.repository.ChatDao;
 import com.lotte.danuri.messengeron.service.ChatService;
 import org.bson.types.ObjectId;
@@ -10,10 +10,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@Transactional(rollbackFor = Exception.class )
+@Transactional
 public class ChatServiceImpl implements ChatService {
 
     @Autowired
@@ -32,14 +33,14 @@ public class ChatServiceImpl implements ChatService {
 
     //메세지 보내기
     @Override
-    public void pushMessage(Chat chat, Message message) {
-        chatDao.pushMessage(chat, message);
+    public void pushMessage(ObjectId roomId, Message message) {
+        chatDao.pushMessage(roomId, message);
     }
 
     //채팅방 닫기
     @Override
-    public boolean closeChat(ObjectId roomId) {
-        return chatDao.closeChat(roomId);
+    public void closeChat(ObjectId roomId) {
+        chatDao.closeChat(roomId);
     }
 
     //채팅방 유효성 확인    @Override
@@ -50,7 +51,7 @@ public class ChatServiceImpl implements ChatService {
     //메세지들 받아오기
     @Override
     public List<Message> getMessages(ObjectId roomId) {
-        return chatDao.getMessages(roomId);
+        return chatDao.getMessages(roomId).orElseGet(ArrayList::new);
     }
 
 
