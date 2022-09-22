@@ -1,15 +1,16 @@
 package com.lotte.danuri.messengeron.controller;
 
-import com.lotte.danuri.messengeron.dto.Chat;
-import com.lotte.danuri.messengeron.dto.Message;
+
+import com.lotte.danuri.messengeron.model.dto.RoomData;
 import com.lotte.danuri.messengeron.service.ChatService;
 import com.lotte.danuri.messengeron.service.RoomService;
+import com.lotte.danuri.messengeron.model.vo.MessageVo;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -22,18 +23,18 @@ public class ChatController {
     @Autowired
     ChatService chatService;
 
-    @PostMapping("chat")
-    void createChatRoom(String userId, String receiverId) {
-        //빈방 생성
-        ObjectId roomId = chatService.createChat();
 
-        //유저에게 주입
-        roomService.createChatRoom(userId, receiverId, roomId);
+    @PostMapping("")
+    @ApiOperation(value = "pushMessage")
+    ResponseEntity pushMessage(@RequestBody MessageVo vo) {
+        chatService.pushMessage(vo.getRoomId(), vo.getMessage());
+        return new ResponseEntity(HttpStatus.CREATED);
     }
 
-    @PostMapping("message")
-    void pushMessage(Chat chat, Message message) {
-        pushMessage(chat, message);
-    }
+    @GetMapping("{userId}/{receiverId}")
+    @ApiOperation(value = "findRoomIdByUserId")
+    ResponseEntity<RoomData> findRoomIdByUserId(@PathVariable String userId, @PathVariable String receiverId) {
+        return new ResponseEntity<>(roomService.findRoomIdByUserId(userId, receiverId), HttpStatus.OK);
 
+    }
 }

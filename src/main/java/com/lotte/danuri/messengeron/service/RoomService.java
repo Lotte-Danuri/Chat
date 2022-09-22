@@ -1,7 +1,7 @@
 package com.lotte.danuri.messengeron.service;
 
-import com.lotte.danuri.messengeron.dto.Room;
-import com.lotte.danuri.messengeron.dto.RoomData;
+import com.lotte.danuri.messengeron.model.dto.Room;
+import com.lotte.danuri.messengeron.model.dto.RoomData;
 import org.bson.types.ObjectId;
 
 import java.util.List;
@@ -9,10 +9,15 @@ import java.util.List;
 
 public interface RoomService {
 
-    Room findRoomsByUserId(String userId);
+    Room findRoomByUserId(String userId);
 
-    List<RoomData> findRoomId(String userId, String receiverId);
+    RoomData createChatRoom(String userId, String receiverId);
 
-    ObjectId createChatRoom(String userId, String receiverId);
+    void deleteRoomData(String userId, ObjectId roomId);
 
-    }
+    RoomData findRoomIdByUserId(String userId, String receiverId);
+
+    Room createUser(String userId);
+
+    List<RoomData> findRoomDatasByUserId(String userId);
+}

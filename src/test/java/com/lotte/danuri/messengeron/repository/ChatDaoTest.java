@@ -1,9 +1,6 @@
 package com.lotte.danuri.messengeron.repository;
 
-import com.lotte.danuri.messengeron.dto.Chat;
-import com.lotte.danuri.messengeron.dto.Message;
-import com.lotte.danuri.messengeron.dto.Room;
-import com.lotte.danuri.messengeron.dto.RoomData;
+import com.lotte.danuri.messengeron.model.dto.Message;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.Test;
@@ -17,7 +14,6 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 @DataMongoTest

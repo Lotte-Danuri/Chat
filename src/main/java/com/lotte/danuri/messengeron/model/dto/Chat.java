@@ -1,6 +1,8 @@
-package com.lotte.danuri.messengeron.dto;
+package com.lotte.danuri.messengeron.model.dto;
 
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,6 +21,7 @@ import java.util.ArrayList;
 @NoArgsConstructor
 public class Chat {
 
+    @JsonSerialize(using= ToStringSerializer.class)
     @Field("_id")
     @Id
     private ObjectId chatId;
@@ -29,6 +32,8 @@ public class Chat {
     private LocalDateTime UpdateAt;
 
     private String lastMessage;
+
+    private boolean valid;
 
     private String roomType;
 

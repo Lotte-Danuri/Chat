@@ -1,7 +1,7 @@
 package com.lotte.danuri.messengeron.repository;
 
-import com.lotte.danuri.messengeron.dto.Chat;
-import com.lotte.danuri.messengeron.dto.Message;
+import com.lotte.danuri.messengeron.model.dto.Chat;
+import com.lotte.danuri.messengeron.model.dto.Message;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Repository
@@ -22,14 +23,15 @@ public class ChatDao {
     private MongoTemplate mongoTemplate;
 
 
+
     //채팅방 생성 메소드
     public ObjectId createChat(Chat chat) {
         return mongoTemplate.insert(chat, "chat").getChatId();
     }
 
     //채팅방에 메세지 삽입하는 메소드
-    public void pushMessage(Chat chat, Message message) {
-        Query query = Query.query(Criteria.where("_id").is(chat.getChatId()));
+    public void pushMessage(ObjectId roomId, Message message) {
+        Query query = Query.query(Criteria.where("_id").is(roomId));
 
         Update updateChat = new Update();
         Update updateMessage = new Update();
@@ -42,18 +44,35 @@ public class ChatDao {
         mongoTemplate.updateFirst(query, updateMessage, "chat");
     }
 
-    //메세지 읽어오는 메소드
-    public List<Message> getMessages(ObjectId roomId){
-        List<Message> messages;
+    //메세지들을 읽어오는 메소드
+    public Optional<List<Message>> getMessages(ObjectId roomId){
+
 
         Query query = Query.query(Criteria.where("_id").is(roomId));
 
 
         Chat chat =  mongoTemplate.findOne(query,Chat.class,"chat");
 
-        messages = chat.getMessageList();
+        Optional<List<Message>> messages = Optional.ofNullable(chat.getMessageList());
 
         return messages;
+    }
+
+    //방 유효성 확인
+    public boolean validChat(ObjectId chatId){
+        Query query = Query.query(Criteria.where("_id").is(chatId));
+        return mongoTemplate.findOne(query,Chat.class,"chat").isValid();
+    }
+
+    //방 비활성화
+    public void closeChat(ObjectId roomId){
+        Query query = Query.query(Criteria.where("_id").is(roomId));
+
+        Update update = new Update();
+
+        update.set("valid", false);
+
+        mongoTemplate.updateFirst(query, update, "chat");
     }
 
 
