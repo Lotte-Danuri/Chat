@@ -7,10 +7,11 @@ import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 @Getter
 @RequiredArgsConstructor
-public class MessageVo {
+public class MessagesVo {
 
     @NonNull
     private String contentType;
@@ -20,7 +21,7 @@ public class MessageVo {
     private String sendBy;
     private String source;
     @NonNull
-    private String id;
+    private List<String> ids;
 
 
 
@@ -28,8 +29,8 @@ public class MessageVo {
         return new Message(new ObjectId(), this.getContentType(), this.getContent(), this.getSendBy(), this.getSource());
     }
 
-    public ObjectId getRoomId() {
-        return new ObjectId(this.getId());
+    public List<String> getRoomIds() {
+        return ids;
     }
 
 }

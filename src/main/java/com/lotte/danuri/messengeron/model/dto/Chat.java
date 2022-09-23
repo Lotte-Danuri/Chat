@@ -28,11 +28,6 @@ public class Chat {
 
     private ArrayList<Message> messageList;
 
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private LocalDateTime UpdateAt;
-
-    private String lastMessage;
-
     private boolean valid;
 
     private String roomType;
