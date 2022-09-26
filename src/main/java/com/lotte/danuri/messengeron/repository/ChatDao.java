@@ -70,6 +70,14 @@ public class ChatDao {
         return messages;
     }
 
+    public Optional<List<Message>> getNewMessages(ObjectId roomId, ObjectId messageId){
+        Query query = Query.query(Criteria.where("_id").is(roomId));
+        query.addCriteria(Criteria.where("messageList._id").gt(messageId));
+        query.fields().include("messageList").exclude("_id");
+        System.out.println(mongoTemplate.findOne(query, Chat.class, "chat").getMessageList());
+        return Optional.of(mongoTemplate.findOne(query, Chat.class, "chat").getMessageList());
+    }
+
 
     //방 유효성 확인
     public boolean validChat(ObjectId chatId){

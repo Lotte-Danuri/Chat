@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
 
 @Service
 @Transactional
@@ -42,7 +41,7 @@ public class ChatServiceImpl implements ChatService {
 
     @Override
     public void pushMessages(List<String> userId, Message message) {
-        userId.stream().map(id -> roomService.findRoomIdByUserId(message.getSendBy(),id).getRoomId()).forEach(roomId -> chatDao.pushMessage(roomId, message));
+        userId.stream().map(id -> roomService.findRoomIdByUserId(message.getSendBy(), id).getRoomId()).forEach(roomId -> chatDao.pushMessage(roomId, message));
     }
 
     //메세지들 받아오기
@@ -54,21 +53,19 @@ public class ChatServiceImpl implements ChatService {
     @Override
     public List<Message> getNewMessages(String userId, ObjectId roomId, ObjectId messageId) {
 
-        roomDao.updateRoomDataLastWatch(userId,roomId);
-        List<Message> newMessages = new ArrayList < Message >();
-                List < Message > messages = getMessages(roomId);
+        roomDao.updateRoomDataLastWatch(userId, roomId);
+/*        List<Message> newMessages = new ArrayList<Message>();
+        List<Message> messages = getMessages(roomId);
         ListIterator<Message> messageListIterator =
                 messages.listIterator(messages.size());
         while (messageListIterator.hasPrevious()) {
             Message message = messageListIterator.previous();
             if (message.getMessageId().getDate().compareTo(messageId.getDate()) > 0) {
                 newMessages.add(message);
-            }else return newMessages;
-        }
-        return newMessages;
+            } else return newMessages;
+        }*/
+        return chatDao.getNewMessages(roomId, messageId).orElseThrow();
     }
-
-
 
 
 }
