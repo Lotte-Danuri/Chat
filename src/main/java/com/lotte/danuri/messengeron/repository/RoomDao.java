@@ -10,8 +10,8 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Optional;
 
 
 @Repository
@@ -25,6 +25,10 @@ public class RoomDao {
         room.setUserId(userId);
         room.setRoomList(new ArrayList<RoomData>());
         return mongoTemplate.insert(room, "room");
+    }
+
+    public boolean userExists(String userId) {
+        return mongoTemplate.exists(Query.query(Criteria.where("_id").is(userId)),"room");
     }
 
     public boolean createChatRoom(String userId, String receiverId, ObjectId roomId) {
@@ -47,6 +51,16 @@ public class RoomDao {
         return mongoTemplate.findById(userId, Room.class,"room");
     }
 
+    public void updateRoomDataLastWatch(String userId, ObjectId roomId) {
+        Query query = Query.query(Criteria.where("_id").is(userId));
+        query.addCriteria(Criteria.where("roomList._id").is(roomId));
+        Update update = new Update();
+
+        update.set("roomList.$.lastWatched", LocalDateTime.now());
+
+        mongoTemplate.findAndModify(query, update,Room.class);
+    }
+
 
     //방목록에 있는 방정보 삭제
     public void deleteRoomData(String userId, ObjectId roomId) {
@@ -55,6 +69,10 @@ public class RoomDao {
         Update updateRoomList = new Update();
         updateRoomList.pull("roomList",Query.query(Criteria.where("_id").is(roomId)));
         mongoTemplate.updateFirst(query, updateRoomList, "room");
+    }
+
+    public boolean validRoom(String userId) {
+        return mongoTemplate.exists(Query.query(Criteria.where("_id").is(userId)),  "room");
     }
 
 }

@@ -10,6 +10,9 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDateTime;
 
 
 @Data
@@ -31,4 +34,7 @@ public class Message {
     private String sendBy;
 
     private String source;
+
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private LocalDateTime createdAt;
 }
