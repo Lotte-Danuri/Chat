@@ -1,15 +1,18 @@
 package com.lotte.danuri.messengeron.service.serviceImpl;
 
+import com.lotte.danuri.messengeron.config.util.S3Upload;
 import com.lotte.danuri.messengeron.model.dto.Message;
 import com.lotte.danuri.messengeron.repository.ChatDao;
 import com.lotte.danuri.messengeron.repository.RoomDao;
 import com.lotte.danuri.messengeron.service.ChatService;
 import com.lotte.danuri.messengeron.service.RoomService;
+import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,16 +20,16 @@ import java.util.ListIterator;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class ChatServiceImpl implements ChatService {
 
-    @Autowired
+
+    private final S3Upload s3Upload;
     private ChatDao chatDao;
 
-    @Autowired
     private RoomService roomService;
 
 
-    @Autowired
     private RoomDao roomDao;
 
     //메세지 보내기
@@ -81,5 +84,13 @@ public class ChatServiceImpl implements ChatService {
         return null;
     }
 
+    private String uploadImage(MultipartFile multipartFile){
+        try {
+            return s3Upload.upload(multipartFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
 
 }

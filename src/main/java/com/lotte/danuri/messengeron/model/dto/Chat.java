@@ -32,4 +32,6 @@ public class Chat {
 
     private String roomType;
 
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private LocalDateTime updateAt;
 }

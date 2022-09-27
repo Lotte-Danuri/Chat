@@ -5,6 +5,7 @@ import com.lotte.danuri.messengeron.model.dto.Message;
 import com.lotte.danuri.messengeron.model.dto.RoomData;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -50,7 +51,7 @@ public class ChatDao {
         Update updateMessage = new Update();
 
         updateChat.set("updateAt", LocalDateTime.now());
-        updateChat.set("lastMessage", message.getContent());
+        //updateChat.set("lastMessage", message.getContent());
         updateMessage.push("messageList").each(message);
 
         mongoTemplate.updateFirst(query, updateChat,"chat");

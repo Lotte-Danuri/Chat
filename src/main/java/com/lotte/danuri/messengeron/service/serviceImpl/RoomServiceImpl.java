@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -67,7 +68,7 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public List<Chat> findRoomDatasByUserId(String userId) {
-        return chatDao.findChatRoomDatas(getRoomList(userId));
+        return chatDao.findChatRoomDatas(getRoomList(userId)).stream().sorted((o1, o2) -> o2.getUpdateAt().compareTo(o1.getUpdateAt())).collect(Collectors.toList());
     }
 
     private ArrayList<RoomData> getRoomList(String userId) {
