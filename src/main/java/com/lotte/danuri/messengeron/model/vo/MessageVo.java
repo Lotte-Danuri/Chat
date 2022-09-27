@@ -6,6 +6,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -25,7 +26,7 @@ public class MessageVo {
 
 
     public Message getMessage() {
-        return new Message(new ObjectId(), this.getContentType(), this.getContent(), this.getSendBy(), this.getSource());
+        return new Message(new ObjectId(), this.getContentType(), this.getContent(), this.getSendBy(), this.getSource(), LocalDateTime.now());
     }
 
     public ObjectId getRoomId() {

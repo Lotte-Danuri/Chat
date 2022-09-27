@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import java.util.ArrayList;
@@ -70,11 +71,9 @@ public class ChatDao {
         return messages;
     }
 
-    public Optional<List<Message>> getNewMessages(ObjectId roomId, ObjectId messageId){
+    public Optional<List<Message>> getNewMessages(ObjectId roomId){
         Query query = Query.query(Criteria.where("_id").is(roomId));
-        query.addCriteria(Criteria.where("messageList._id").gt(messageId));
         query.fields().include("messageList").exclude("_id");
-        System.out.println(mongoTemplate.findOne(query, Chat.class, "chat").getMessageList());
         return Optional.of(mongoTemplate.findOne(query, Chat.class, "chat").getMessageList());
     }
 

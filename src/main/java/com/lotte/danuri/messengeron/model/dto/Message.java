@@ -34,4 +34,7 @@ public class Message {
     private String sendBy;
 
     private String source;
+
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private LocalDateTime createdAt;
 }

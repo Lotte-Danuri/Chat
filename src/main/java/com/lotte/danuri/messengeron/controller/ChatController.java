@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -48,9 +49,9 @@ public class ChatController {
         return new ResponseEntity<>(chatService.getMessages(new ObjectId(roomId)), HttpStatus.OK);
     }
 
-    @GetMapping("newMessages/{userId}/{roomId}/{messageId}")
+    @GetMapping("newMessages/{userId}/{roomId}/{createdAt}")
     @ApiOperation(value = "getNewMessages")
-    ResponseEntity<List<Message>> getNewMessages(@PathVariable String userId,@PathVariable String roomId, @PathVariable String messageId) {
-        return new ResponseEntity<>(chatService.getNewMessages(userId,new ObjectId(roomId), new ObjectId(messageId)), HttpStatus.OK);
+    ResponseEntity<List<Message>> getNewMessages(@PathVariable String userId,@PathVariable String roomId, @PathVariable String createdAt) {
+        return new ResponseEntity<>(chatService.getNewMessages(userId,new ObjectId(roomId), LocalDateTime.parse(createdAt)), HttpStatus.OK);
     }
 }

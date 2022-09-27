@@ -6,6 +6,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -19,6 +20,7 @@ public class MessagesVo {
     private String content;
     @NonNull
     private String sendBy;
+
     private String source;
     @NonNull
     private List<String> ids;
@@ -26,7 +28,7 @@ public class MessagesVo {
 
 
     public Message getMessage() {
-        return new Message(new ObjectId(), this.getContentType(), this.getContent(), this.getSendBy(), this.getSource());
+        return new Message(new ObjectId(), this.getContentType(), this.getContent(), this.getSendBy(), this.getSource(), LocalDateTime.now());
     }
 
     public List<String> getRoomIds() {

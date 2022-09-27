@@ -10,8 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
 @Service
 @Transactional
@@ -51,7 +53,7 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public List<Message> getNewMessages(String userId, ObjectId roomId, ObjectId messageId) {
+    public List<Message> getNewMessages(String userId, ObjectId roomId, LocalDateTime createdAt) {
 
         roomDao.updateRoomDataLastWatch(userId, roomId);
 /*        List<Message> newMessages = new ArrayList<Message>();
@@ -64,7 +66,19 @@ public class ChatServiceImpl implements ChatService {
                 newMessages.add(message);
             } else return newMessages;
         }*/
-        return chatDao.getNewMessages(roomId, messageId).orElseThrow();
+        List<Message> reMsgs = new ArrayList<Message>();
+        List<Message> msgs = chatDao.getNewMessages(roomId).orElseThrow();
+        ListIterator<Message> ll = msgs.listIterator(msgs.size());
+        while (ll.hasPrevious()) {
+            Message msg = ll.previous();
+            if(msg.getCreatedAt().compareTo(createdAt) > 0) {
+                reMsgs.add(msg);
+            } else{
+                return reMsgs;
+            }
+        }
+
+        return null;
     }
 
 

@@ -4,6 +4,7 @@ import com.lotte.danuri.messengeron.model.dto.Chat;
 import com.lotte.danuri.messengeron.model.dto.Message;
 import org.bson.types.ObjectId;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface ChatService {
@@ -16,6 +17,6 @@ public interface ChatService {
 
     void pushMessages(List<String> roomIds, Message message);
 
-    List<Message> getNewMessages(String userId, ObjectId roomId, ObjectId messageId);
+    List<Message> getNewMessages(String userId, ObjectId roomId, LocalDateTime createdAt);
 
 }
