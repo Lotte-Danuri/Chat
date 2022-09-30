@@ -6,11 +6,16 @@ import com.lotte.danuri.messengeron.exception.RoomNotFoundException;
 import com.lotte.danuri.messengeron.model.dto.Chat;
 import com.lotte.danuri.messengeron.model.dto.Room;
 import com.lotte.danuri.messengeron.model.dto.RoomData;
+import com.lotte.danuri.messengeron.model.vo.RoomListVo;
 import com.lotte.danuri.messengeron.repository.ChatDao;
 import com.lotte.danuri.messengeron.repository.RoomDao;
+import com.lotte.danuri.messengeron.service.ChatService;
 import com.lotte.danuri.messengeron.service.RoomService;
+import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,10 +25,10 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
 @Service
 @Transactional
 public class RoomServiceImpl implements RoomService {
-
 
     @Autowired
     private ChatDao chatDao;
@@ -67,8 +72,14 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public List<Chat> findRoomDatasByUserId(String userId) {
-        return chatDao.findChatRoomDatas(getRoomList(userId)).stream().sorted((o1, o2) -> o2.getUpdateAt().compareTo(o1.getUpdateAt())).collect(Collectors.toList());
+    public List<RoomListVo> findRoomDatasByUserId(String userId) {
+        List<RoomListVo> chatRoomList = new ArrayList<>();
+
+        for(RoomData roomData : getRoomList(userId)) {
+            chatRoomList.add(new RoomListVo(chatDao.findChatRoomData(roomData.getRoomId()), roomData.getReceiverId(), chatDao.getCountNewMessages(roomData.getRoomId(), roomData.getLastWatched())));
+        }
+        return chatRoomList.stream().sorted((o1, o2) -> o2.getChat().getUpdateAt().compareTo(o1.getChat().getUpdateAt())).collect(Collectors.toList());
+
     }
 
     private ArrayList<RoomData> getRoomList(String userId) {
@@ -95,6 +106,9 @@ public class RoomServiceImpl implements RoomService {
         Chat chat = new Chat();
         chat.setRoomType("chat");
         chat.setValid(true);
+        chat.setMessageList(new ArrayList<>());
+        chat.setUpdateAt(LocalDateTime.now());
+
         return chatDao.createChat(chat);
     }
 

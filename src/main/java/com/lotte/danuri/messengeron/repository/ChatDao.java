@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Optional;
 
 
@@ -26,16 +27,11 @@ public class ChatDao {
     @Autowired
     private MongoTemplate mongoTemplate;
 
-    public List<Chat> findChatRoomDatas(List<RoomData> roomDataList) {
-        List<Chat> chatRoomList = new ArrayList<Chat>();
-
-        for(RoomData roomData : roomDataList) {
-            Query query = new Query();
-            query.addCriteria(Criteria.where("_id").is(roomData.getRoomId()));
-            query.fields().slice("messageList",-1);
-            chatRoomList.add(mongoTemplate.findOne(query, Chat.class, "chat"));
-        }
-        return chatRoomList;
+    public Chat findChatRoomData(ObjectId id) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("_id").is(id));
+        query.fields().slice("messageList", -1);
+        return mongoTemplate.findOne(query, Chat.class, "chat");
     }
 
     //채팅방 생성 메소드
@@ -54,39 +50,62 @@ public class ChatDao {
         //updateChat.set("lastMessage", message.getContent());
         updateMessage.push("messageList").each(message);
 
-        mongoTemplate.updateFirst(query, updateChat,"chat");
+        mongoTemplate.updateFirst(query, updateChat, "chat");
         mongoTemplate.updateFirst(query, updateMessage, "chat");
     }
 
     //메세지들을 읽어오는 메소드
-    public Optional<List<Message>> getMessages(ObjectId roomId){
+    public Optional<List<Message>> getMessages(ObjectId roomId) {
 
 
         Query query = Query.query(Criteria.where("_id").is(roomId));
 
 
-        Chat chat =  mongoTemplate.findOne(query,Chat.class,"chat");
+        Chat chat = mongoTemplate.findOne(query, Chat.class, "chat");
 
         Optional<List<Message>> messages = Optional.ofNullable(chat.getMessageList());
 
         return messages;
     }
 
-    public Optional<List<Message>> getNewMessages(ObjectId roomId){
+    public Optional<List<Message>> getNewMessages(ObjectId roomId, LocalDateTime lastWatched) {
+        List<Message> reMsgs = new ArrayList<>();
+
         Query query = Query.query(Criteria.where("_id").is(roomId));
         query.fields().include("messageList").exclude("_id");
-        return Optional.of(mongoTemplate.findOne(query, Chat.class, "chat").getMessageList());
+        List<Message> msgs = mongoTemplate.findOne(query, Chat.class, "chat").getMessageList();
+        if(msgs.size() == 0) {
+            return Optional.of(reMsgs);
+        }
+        ListIterator<Message> ll = msgs.listIterator(msgs.size());
+
+        while (ll.hasPrevious()) {
+            Message msg = ll.previous();
+
+            if(msg.getCreatedAt().compareTo(lastWatched) > 0) {
+
+                reMsgs.add(msg);
+
+            } else{
+                return Optional.of(reMsgs);
+            }
+        }
+        return Optional.ofNullable(reMsgs);
+    }
+
+    public int getCountNewMessages(ObjectId roomId, LocalDateTime lastWatched) {
+        return getNewMessages(roomId, lastWatched).orElseGet(ArrayList::new).size();
     }
 
 
     //방 유효성 확인
-    public boolean validChat(ObjectId chatId){
+    public boolean validChat(ObjectId chatId) {
         Query query = Query.query(Criteria.where("_id").is(chatId));
-        return mongoTemplate.findOne(query,Chat.class,"chat").isValid();
+        return mongoTemplate.findOne(query, Chat.class, "chat").isValid();
     }
 
     //방 비활성화
-    public void closeChat(ObjectId roomId){
+    public void closeChat(ObjectId roomId) {
         Query query = Query.query(Criteria.where("_id").is(roomId));
 
         Update update = new Update();

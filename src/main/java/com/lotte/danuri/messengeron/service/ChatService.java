@@ -11,12 +11,12 @@ public interface ChatService {
 
      void pushMessage(ObjectId roomId, Message message);
 
-     List<Message> getMessages(ObjectId roomId);
+     List<Message> getMessages(String userId,ObjectId roomId);
 
      boolean validChat(ObjectId roomId);
 
     void pushMessages(List<String> roomIds, Message message);
 
-    List<Message> getNewMessages(String userId, ObjectId roomId, LocalDateTime createdAt);
+    List<Message> getNewMessages(String userId, ObjectId roomId);
 
 }

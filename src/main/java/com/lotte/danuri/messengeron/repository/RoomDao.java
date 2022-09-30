@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Optional;
 
 
 @Repository
@@ -28,7 +29,7 @@ public class RoomDao {
     }
 
     public boolean userExists(String userId) {
-        return mongoTemplate.exists(Query.query(Criteria.where("_id").is(userId)),"room");
+        return mongoTemplate.exists(Query.query(Criteria.where("_id").is(userId)), "room");
     }
 
     public boolean createChatRoom(String userId, String receiverId, ObjectId roomId) {
@@ -41,6 +42,7 @@ public class RoomDao {
 
         sendRoomData.setReceiverId(receiverId);
         sendRoomData.setRoomId(roomId);
+        sendRoomData.setLastWatched(LocalDateTime.now());
 
         updateRoomList.push("roomList").each(sendRoomData);
 
@@ -48,7 +50,7 @@ public class RoomDao {
     }
 
     public Room findRoomByUserId(String userId) {
-        return mongoTemplate.findById(userId, Room.class,"room");
+        return mongoTemplate.findById(userId, Room.class, "room");
     }
 
     public void updateRoomDataLastWatch(String userId, ObjectId roomId) {
@@ -58,21 +60,25 @@ public class RoomDao {
 
         update.set("roomList.$.lastWatched", LocalDateTime.now());
 
-        mongoTemplate.findAndModify(query, update,Room.class);
+        mongoTemplate.findAndModify(query, update, Room.class);
     }
 
+    public LocalDateTime getLastWatched(String userId, ObjectId roomId) {
+        Room room = mongoTemplate.findOne(Query.query(Criteria.where("userId").is(userId)), Room.class, "room");
+        return room.getRoomList().stream().filter(s -> s.getRoomId().equals(roomId)).findFirst().orElseThrow(() -> new RuntimeException("Not Found RoomId")).getLastWatched();
+    }
 
     //방목록에 있는 방정보 삭제
     public void deleteRoomData(String userId, ObjectId roomId) {
         Query query = Query.query(Criteria.where("_id").is(userId));
 
         Update updateRoomList = new Update();
-        updateRoomList.pull("roomList",Query.query(Criteria.where("_id").is(roomId)));
+        updateRoomList.pull("roomList", Query.query(Criteria.where("_id").is(roomId)));
         mongoTemplate.updateFirst(query, updateRoomList, "room");
     }
 
     public boolean validRoom(String userId) {
-        return mongoTemplate.exists(Query.query(Criteria.where("_id").is(userId)),  "room");
+        return mongoTemplate.exists(Query.query(Criteria.where("_id").is(userId)), "room");
     }
 
 }
