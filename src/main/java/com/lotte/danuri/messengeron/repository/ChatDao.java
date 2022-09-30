@@ -93,10 +93,8 @@ public class ChatDao {
         return Optional.ofNullable(reMsgs);
     }
 
-    public Optional<List<Message>> getCountNewMessages(ObjectId roomId) {
-        Query query = Query.query(Criteria.where("_id").is(roomId));
-        query.fields().include("messageList").exclude("_id");
-        return Optional.of(mongoTemplate.findOne(query, Chat.class, "chat").getMessageList());
+    public int getCountNewMessages(ObjectId roomId, LocalDateTime lastWatched) {
+        return getNewMessages(roomId, lastWatched).orElseGet(ArrayList::new).size();
     }
 
 

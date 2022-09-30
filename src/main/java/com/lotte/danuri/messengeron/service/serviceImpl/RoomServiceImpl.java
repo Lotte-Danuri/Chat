@@ -76,7 +76,7 @@ public class RoomServiceImpl implements RoomService {
         List<RoomListVo> chatRoomList = new ArrayList<>();
 
         for(RoomData roomData : getRoomList(userId)) {
-            chatRoomList.add(new RoomListVo(chatDao.findChatRoomData(roomData.getRoomId()), roomData.getReceiverId(), chatDao.getNewMessages(roomData.getRoomId(), roomData.getLastWatched()).orElseGet(ArrayList::new).size()));
+            chatRoomList.add(new RoomListVo(chatDao.findChatRoomData(roomData.getRoomId()), roomData.getReceiverId(), chatDao.getCountNewMessages(roomData.getRoomId(), roomData.getLastWatched())));
         }
         return chatRoomList.stream().sorted((o1, o2) -> o2.getChat().getUpdateAt().compareTo(o1.getChat().getUpdateAt())).collect(Collectors.toList());
 
