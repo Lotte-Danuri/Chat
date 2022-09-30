@@ -1,6 +1,7 @@
 package com.lotte.danuri.messengeron.controller;
 
 import com.lotte.danuri.messengeron.model.dto.Message;
+import com.lotte.danuri.messengeron.model.vo.ImageVo;
 import com.lotte.danuri.messengeron.model.vo.MessagesVo;
 import com.lotte.danuri.messengeron.service.ChatService;
 import com.lotte.danuri.messengeron.service.RoomService;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -44,14 +46,23 @@ public class ChatController {
 
     @GetMapping("messages/{userId}/{roomId}")
     @ApiOperation(value = "getMessages")
-    ResponseEntity<List<Message>> getMessages(@PathVariable String userId,@PathVariable String roomId) {
+    ResponseEntity<List<Message>> getMessages(@PathVariable String userId, @PathVariable String roomId) {
 
-        return new ResponseEntity<>(chatService.getMessages(userId,new ObjectId(roomId)), HttpStatus.OK);
+        return new ResponseEntity<>(chatService.getMessages(userId, new ObjectId(roomId)), HttpStatus.OK);
     }
 
     @GetMapping("newMessages/{userId}/{roomId}")
     @ApiOperation(value = "getNewMessages")
-    ResponseEntity<List<Message>> getNewMessages(@PathVariable String userId,@PathVariable String roomId) {
-        return new ResponseEntity<>(chatService.getNewMessages(userId,new ObjectId(roomId)), HttpStatus.OK);
+    ResponseEntity<List<Message>> getNewMessages(@PathVariable String userId, @PathVariable String roomId) {
+        return new ResponseEntity<>(chatService.getNewMessages(userId, new ObjectId(roomId)), HttpStatus.OK);
+    }
+
+    @PostMapping("image")
+    @ApiOperation(value = "postImage")
+    ResponseEntity pushImage(@RequestPart MessageVo messageVo, @RequestPart MultipartFile imageFile){
+        Message message = messageVo.getMessage();
+        message.setSource(chatService.pushImage(imageFile));
+        chatService.pushMessage(messageVo.getRoomId(),message);
+        return new ResponseEntity(HttpStatus.CREATED);
     }
 }
