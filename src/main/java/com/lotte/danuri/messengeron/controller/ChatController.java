@@ -1,7 +1,6 @@
 package com.lotte.danuri.messengeron.controller;
 
 import com.lotte.danuri.messengeron.model.dto.Message;
-import com.lotte.danuri.messengeron.model.vo.ImageVo;
 import com.lotte.danuri.messengeron.model.vo.MessagesVo;
 import com.lotte.danuri.messengeron.service.ChatService;
 import com.lotte.danuri.messengeron.service.RoomService;
@@ -15,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 
