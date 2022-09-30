@@ -83,10 +83,8 @@ public class ChatDao {
             Message msg = ll.previous();
 
             if(msg.getCreatedAt().compareTo(lastWatched) > 0) {
-                System.out.println(lastWatched+"/"+msg.getCreatedAt());
-                System.out.println(msg);
+
                 reMsgs.add(msg);
-                System.out.println(reMsgs.size() + " messages to");
 
             } else{
                 return Optional.of(reMsgs);
