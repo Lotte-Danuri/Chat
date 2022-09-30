@@ -42,16 +42,16 @@ public class ChatController {
         return new ResponseEntity(HttpStatus.CREATED);
     }
 
-    @GetMapping("messages/{roomId}")
+    @GetMapping("messages/{userId}/{roomId}")
     @ApiOperation(value = "getMessages")
-    ResponseEntity<List<Message>> getMessages(@PathVariable String roomId) {
+    ResponseEntity<List<Message>> getMessages(@PathVariable String userId,@PathVariable String roomId) {
 
-        return new ResponseEntity<>(chatService.getMessages(new ObjectId(roomId)), HttpStatus.OK);
+        return new ResponseEntity<>(chatService.getMessages(userId,new ObjectId(roomId)), HttpStatus.OK);
     }
 
-    @GetMapping("newMessages/{userId}/{roomId}/{createdAt}")
+    @GetMapping("newMessages/{userId}/{roomId}")
     @ApiOperation(value = "getNewMessages")
-    ResponseEntity<List<Message>> getNewMessages(@PathVariable String userId,@PathVariable String roomId, @PathVariable String createdAt) {
-        return new ResponseEntity<>(chatService.getNewMessages(userId,new ObjectId(roomId), LocalDateTime.parse(createdAt)), HttpStatus.OK);
+    ResponseEntity<List<Message>> getNewMessages(@PathVariable String userId,@PathVariable String roomId) {
+        return new ResponseEntity<>(chatService.getNewMessages(userId,new ObjectId(roomId)), HttpStatus.OK);
     }
 }

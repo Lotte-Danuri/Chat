@@ -2,6 +2,7 @@ package com.lotte.danuri.messengeron.controller;
 
 import com.lotte.danuri.messengeron.model.dto.Chat;
 import com.lotte.danuri.messengeron.model.dto.RoomData;
+import com.lotte.danuri.messengeron.model.vo.RoomListVo;
 import com.lotte.danuri.messengeron.service.RoomService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,7 @@ public class RoomController {
 
     @GetMapping("/{userId}")
     @ApiOperation(value = "findRoomDatasByUserId")
-    public ResponseEntity<List<Chat>> findRoomDatasByUserId(@PathVariable final String userId) {
+    public ResponseEntity<List<RoomListVo>> findRoomDatasByUserId(@PathVariable final String userId) {
         return new ResponseEntity<>(roomService.findRoomDatasByUserId(userId), HttpStatus.OK);
     }
 

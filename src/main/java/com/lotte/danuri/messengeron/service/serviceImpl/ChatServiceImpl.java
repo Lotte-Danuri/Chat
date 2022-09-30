@@ -8,6 +8,7 @@ import com.lotte.danuri.messengeron.service.ChatService;
 import com.lotte.danuri.messengeron.service.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,12 +24,17 @@ import java.util.ListIterator;
 @RequiredArgsConstructor
 public class ChatServiceImpl implements ChatService {
 
+    @Autowired
 
     private final S3Upload s3Upload;
+
+    @Autowired
     private ChatDao chatDao;
+    @Autowired
 
     private RoomService roomService;
 
+    @Autowired
 
     private RoomDao roomDao;
 
@@ -51,37 +57,17 @@ public class ChatServiceImpl implements ChatService {
 
     //메세지들 받아오기
     @Override
-    public List<Message> getMessages(ObjectId roomId) {
+    public List<Message> getMessages(String userId,ObjectId roomId) {
+        roomDao.updateRoomDataLastWatch(userId, roomId);
+
         return chatDao.getMessages(roomId).orElseGet(ArrayList::new);
     }
 
     @Override
-    public List<Message> getNewMessages(String userId, ObjectId roomId, LocalDateTime createdAt) {
-
+    public List<Message> getNewMessages(String userId, ObjectId roomId) {
+        List<Message> messages = chatDao.getNewMessages(roomId, roomDao.getLastWatched(userId,roomId)).orElseThrow();
         roomDao.updateRoomDataLastWatch(userId, roomId);
-/*        List<Message> newMessages = new ArrayList<Message>();
-        List<Message> messages = getMessages(roomId);
-        ListIterator<Message> messageListIterator =
-                messages.listIterator(messages.size());
-        while (messageListIterator.hasPrevious()) {
-            Message message = messageListIterator.previous();
-            if (message.getMessageId().getDate().compareTo(messageId.getDate()) > 0) {
-                newMessages.add(message);
-            } else return newMessages;
-        }*/
-        List<Message> reMsgs = new ArrayList<Message>();
-        List<Message> msgs = chatDao.getNewMessages(roomId).orElseThrow();
-        ListIterator<Message> ll = msgs.listIterator(msgs.size());
-        while (ll.hasPrevious()) {
-            Message msg = ll.previous();
-            if(msg.getCreatedAt().compareTo(createdAt) > 0) {
-                reMsgs.add(msg);
-            } else{
-                return reMsgs;
-            }
-        }
-
-        return null;
+        return messages;
     }
 
     private String uploadImage(MultipartFile multipartFile){

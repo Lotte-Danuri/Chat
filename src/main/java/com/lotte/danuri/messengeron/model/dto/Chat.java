@@ -34,4 +34,5 @@ public class Chat {
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime updateAt;
+
 }
