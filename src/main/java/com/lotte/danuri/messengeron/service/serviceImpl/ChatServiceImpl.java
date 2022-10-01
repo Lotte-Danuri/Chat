@@ -70,7 +70,7 @@ public class ChatServiceImpl implements ChatService {
         return messages;
     }
 
-    private String uploadImage(MultipartFile multipartFile){
+    public String pushImage(MultipartFile multipartFile){
         try {
             return s3Upload.upload(multipartFile);
         } catch (IOException e) {

@@ -9,13 +9,10 @@ import com.lotte.danuri.messengeron.model.dto.RoomData;
 import com.lotte.danuri.messengeron.model.vo.RoomListVo;
 import com.lotte.danuri.messengeron.repository.ChatDao;
 import com.lotte.danuri.messengeron.repository.RoomDao;
-import com.lotte.danuri.messengeron.service.ChatService;
 import com.lotte.danuri.messengeron.service.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
