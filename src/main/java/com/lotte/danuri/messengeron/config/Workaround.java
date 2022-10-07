@@ -23,7 +23,11 @@ public class Workaround implements WebMvcOpenApiTransformationFilter {
         Server aws = new Server();
         aws.setDescription("aws");
         aws.setUrl("http://43.201.18.146/chat");
-        openApi.setServers(Arrays.asList(local,aws));
+
+        Server dns = new Server();
+        dns.setDescription("aws");
+        dns.setUrl("https://sbbro.xyz/chat");
+        openApi.setServers(Arrays.asList(local,aws,dns));
         return openApi;
     }
 
