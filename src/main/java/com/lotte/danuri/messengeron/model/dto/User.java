@@ -13,11 +13,13 @@ import java.util.ArrayList;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Room {
+public class User {
 
     @Field("_id")
     @Id
     private String userId;
+
+    private String fcmToken;
 
     private ArrayList<RoomData> roomList;
 

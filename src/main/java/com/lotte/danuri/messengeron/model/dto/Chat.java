@@ -1,6 +1,5 @@
 package com.lotte.danuri.messengeron.model.dto;
 
-
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.AllArgsConstructor;
@@ -13,26 +12,29 @@ import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 
-@Document
+
 @Data
+@Document
 @AllArgsConstructor
 @NoArgsConstructor
 public class Chat {
 
-    @JsonSerialize(using= ToStringSerializer.class)
+
     @Field("_id")
     @Id
+    @JsonSerialize(using= ToStringSerializer.class)
     private ObjectId chatId;
 
-    private ArrayList<Message> messageList;
+    private String contentType;
 
-    private boolean valid;
+    private String content;
 
-    private String roomType;
+    private String sendBy;
+
+
+    private String source;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private LocalDateTime updateAt;
-
+    private LocalDateTime createdAt;
 }

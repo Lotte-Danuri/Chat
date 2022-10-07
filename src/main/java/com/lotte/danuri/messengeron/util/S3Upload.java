@@ -1,4 +1,4 @@
-package com.lotte.danuri.messengeron.config.util;
+package com.lotte.danuri.messengeron.util;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;

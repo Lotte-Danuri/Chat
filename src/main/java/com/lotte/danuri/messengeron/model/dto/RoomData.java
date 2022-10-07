@@ -17,7 +17,7 @@ public class RoomData {
 
     //@JsonSerialize(using = ToStringSerializer.class)
     @Id
-    private ObjectId roomId;
+    private ObjectId chatRoomId;
 
     private String receiverId;
 
