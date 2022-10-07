@@ -1,9 +1,8 @@
 package com.lotte.danuri.messengeron.controller;
 
-import com.lotte.danuri.messengeron.model.dto.Chat;
 import com.lotte.danuri.messengeron.model.dto.RoomData;
 import com.lotte.danuri.messengeron.model.vo.RoomListVo;
-import com.lotte.danuri.messengeron.service.RoomService;
+import com.lotte.danuri.messengeron.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
@@ -16,36 +15,36 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("room")
-public class RoomController {
+@RequestMapping("user")
+public class UserController {
 
 
-    private final RoomService roomService;
+    private final UserService userService;
 
     @GetMapping("/{userId}")
     @ApiOperation(value = "findRoomDatasByUserId")
     public ResponseEntity<List<RoomListVo>> findRoomDatasByUserId(@PathVariable final String userId) {
-        return new ResponseEntity<>(roomService.findRoomDatasByUserId(userId), HttpStatus.OK);
+        return new ResponseEntity<>(userService.findUserDatasByUserId(userId), HttpStatus.OK);
     }
 
     @GetMapping("/{userId}/{receiverId}")
     @ApiOperation(value = "findRoomIdByUserId")
     ResponseEntity<RoomData> findRoomIdByUserId(@PathVariable String userId, @PathVariable String receiverId) {
-        return new ResponseEntity<>(roomService.findRoomIdByUserId(userId, receiverId), HttpStatus.OK);
+        return new ResponseEntity<>(userService.findRoomIdByUserId(userId, receiverId), HttpStatus.OK);
 
     }
 
     @DeleteMapping("/{userId}")
     @ApiOperation(value = "deleteRoomData")
     public ResponseEntity deleteRoomData(@PathVariable final String userId, @RequestParam final ObjectId roomId) {
-        roomService.deleteRoomData(userId, roomId);
+        userService.deleteRoomData(userId, roomId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("")
     @ApiOperation(value = "createUser")
-    public ResponseEntity createUser(String userId) {
-        roomService.createUser(userId);
+    public ResponseEntity createUser(String userId, String fcmToken) {
+        userService.createUser(userId, fcmToken);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

@@ -1,7 +1,7 @@
 package com.lotte.danuri.messengeron.model.vo;
 
 
-import com.lotte.danuri.messengeron.model.dto.Chat;
+import com.lotte.danuri.messengeron.model.dto.ChatRoom;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -13,10 +13,10 @@ import org.springframework.data.annotation.Id;
 public class RoomListVo {
 
     @Id
-    private Chat chat;
+    private ChatRoom chatRoom;
 
     private String receiverId;
 
-    private int countNewMessages;
+    private int countNewChats;
 
 }

@@ -1,6 +1,6 @@
 package com.lotte.danuri.messengeron.repository;
 
-import com.lotte.danuri.messengeron.model.dto.Room;
+import com.lotte.danuri.messengeron.model.dto.User;
 import com.lotte.danuri.messengeron.model.dto.RoomData;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,45 +12,45 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Optional;
 
 
 @Repository
-public class RoomDao {
+public class UserDao {
 
     @Autowired
     private MongoTemplate mongoTemplate;
 
-    public Room createUser(String userId) {
-        Room room = new Room();
-        room.setUserId(userId);
-        room.setRoomList(new ArrayList<RoomData>());
-        return mongoTemplate.insert(room, "room");
+    public User createUser(String userId, String fcmToken) {
+        User user = new User();
+        user.setUserId(userId);
+        user.setFcmToken(fcmToken);
+        user.setRoomList(new ArrayList<RoomData>());
+        return mongoTemplate.insert(user, "user");
     }
 
     public boolean userExists(String userId) {
-        return mongoTemplate.exists(Query.query(Criteria.where("_id").is(userId)), "room");
+        return mongoTemplate.exists(Query.query(Criteria.where("_id").is(userId)), "user");
     }
 
     public boolean createChatRoom(String userId, String receiverId, ObjectId roomId) {
 
-        Update updateRoomList = new Update();
+        Update updateUserList = new Update();
 
         RoomData sendRoomData = new RoomData();
 
         Query query = Query.query(Criteria.where("_id").is(userId));
 
         sendRoomData.setReceiverId(receiverId);
-        sendRoomData.setRoomId(roomId);
+        sendRoomData.setChatRoomId(roomId);
         sendRoomData.setLastWatched(LocalDateTime.now());
 
-        updateRoomList.push("roomList").each(sendRoomData);
+        updateUserList.push("roomList").each(sendRoomData);
 
-        return mongoTemplate.upsert(query, updateRoomList, "room").wasAcknowledged();
+        return mongoTemplate.upsert(query, updateUserList, "user").wasAcknowledged();
     }
 
-    public Room findRoomByUserId(String userId) {
-        return mongoTemplate.findById(userId, Room.class, "room");
+    public User findUserByUserId(String userId) {
+        return mongoTemplate.findById(userId, User.class, "user");
     }
 
     public void updateRoomDataLastWatch(String userId, ObjectId roomId) {
@@ -60,12 +60,12 @@ public class RoomDao {
 
         update.set("roomList.$.lastWatched", LocalDateTime.now());
 
-        mongoTemplate.findAndModify(query, update, Room.class);
+        mongoTemplate.findAndModify(query, update, User.class);
     }
 
     public LocalDateTime getLastWatched(String userId, ObjectId roomId) {
-        Room room = mongoTemplate.findOne(Query.query(Criteria.where("userId").is(userId)), Room.class, "room");
-        return room.getRoomList().stream().filter(s -> s.getRoomId().equals(roomId)).findFirst().orElseThrow(() -> new RuntimeException("Not Found RoomId")).getLastWatched();
+        User user = mongoTemplate.findOne(Query.query(Criteria.where("userId").is(userId)), User.class, "user");
+        return user.getRoomList().stream().filter(s -> s.getChatRoomId().equals(roomId)).findFirst().orElseThrow(() -> new RuntimeException("Not Found UserId")).getLastWatched();
     }
 
     //방목록에 있는 방정보 삭제
@@ -74,11 +74,14 @@ public class RoomDao {
 
         Update updateRoomList = new Update();
         updateRoomList.pull("roomList", Query.query(Criteria.where("_id").is(roomId)));
-        mongoTemplate.updateFirst(query, updateRoomList, "room");
+        mongoTemplate.updateFirst(query, updateRoomList, "user");
     }
 
-    public boolean validRoom(String userId) {
-        return mongoTemplate.exists(Query.query(Criteria.where("_id").is(userId)), "room");
+    public boolean validUser(String userId) {
+        return mongoTemplate.exists(Query.query(Criteria.where("_id").is(userId)), "user");
     }
 
+    public String getToken(String userId) {
+        return mongoTemplate.findOne(Query.query(Criteria.where("_id").is(userId)), User.class,"user").getFcmToken();
+    }
 }

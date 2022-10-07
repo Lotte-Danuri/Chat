@@ -1,6 +1,6 @@
 package com.lotte.danuri.messengeron.model.vo;
 
-import com.lotte.danuri.messengeron.model.dto.Message;
+import com.lotte.danuri.messengeron.model.dto.Chat;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -8,11 +8,10 @@ import org.bson.types.ObjectId;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Stream;
 
 @Getter
 @RequiredArgsConstructor
-public class MessagesVo {
+public class ChatsVo {
 
     @NonNull
     private String contentType;
@@ -23,16 +22,16 @@ public class MessagesVo {
 
     private String source;
     @NonNull
-    private List<String> ids;
+    private List<String> sendTo;
 
 
 
-    public Message getMessage() {
-        return new Message(new ObjectId(), this.getContentType(), this.getContent(), this.getSendBy(), this.getSource(), LocalDateTime.now());
+    public Chat getChat() {
+        return new Chat(new ObjectId(), this.getContentType(), this.getContent(), this.getSendBy(), this.getSource(), LocalDateTime.now());
     }
 
-    public List<String> getRoomIds() {
-        return ids;
+    public List<String> getChatRoomIds() {
+        return this.sendTo;
     }
 
 }

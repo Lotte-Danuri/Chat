@@ -19,9 +19,11 @@ public class SwaggerConfiguration {
     public Docket api(){
         Server local = new Server("local", "http://localhost:8080", "for local usages", Collections.emptyList(), Collections.emptyList());
         Server aws = new Server("aws", "http://http://43.201.18.146/chat", "for aws", Collections.emptyList(), Collections.emptyList());
+        Server dns = new Server("dns", "http://http://sbbro.xyz/chat", "for dns", Collections.emptyList(), Collections.emptyList());
 
         return new Docket(DocumentationType.OAS_30)
-                .servers(local,aws)                .select()
+                .servers(local,aws,dns)
+                .select()
                 .apis(RequestHandlerSelectors.basePackage("com.lotte.danuri.messengeron.controller"))
                 .paths(PathSelectors.any())
                 .build()
