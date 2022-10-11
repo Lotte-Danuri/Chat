@@ -1,8 +1,6 @@
 package com.lotte.danuri.messengeron.service;
 
-import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
-import com.google.firebase.messaging.Message;
 import com.lotte.danuri.messengeron.model.dto.Chat;
 import com.lotte.danuri.messengeron.repository.UserDao;
 import com.lotte.danuri.messengeron.util.FCMUtil;
