@@ -9,10 +9,8 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
 
 
 @Repository
@@ -21,19 +19,19 @@ public class UserDao {
     @Autowired
     private MongoTemplate mongoTemplate;
 
-    public User createUser(String userId) {
+    public void createUser(String userId) {
         User user = new User();
         user.setUserId(userId);
-        user.setFcmToken(new ArrayList<String>());
-        user.setRoomList(new ArrayList<RoomData>());
-        return mongoTemplate.insert(user, "user");
+        user.setFcmToken(new ArrayList<>());
+        user.setRoomList(new ArrayList<>());
+        mongoTemplate.insert(user, "user");
     }
 
     public boolean userExists(String userId) {
         return mongoTemplate.exists(Query.query(Criteria.where("_id").is(userId)), "user");
     }
 
-    public boolean createChatRoom(String userId, String receiverId, ObjectId roomId) {
+    public void createChatRoom(String userId, String receiverId, ObjectId roomId) {
 
         Update updateUserList = new Update();
 
@@ -47,7 +45,7 @@ public class UserDao {
 
         updateUserList.push("roomList").each(sendRoomData);
 
-        return mongoTemplate.upsert(query, updateUserList, "user").wasAcknowledged();
+        mongoTemplate.upsert(query, updateUserList, "user").wasAcknowledged();
     }
 
     public User findUserByUserId(String userId) {
@@ -80,10 +78,6 @@ public class UserDao {
 
     public boolean validUser(String userId) {
         return mongoTemplate.exists(Query.query(Criteria.where("_id").is(userId)), "user");
-    }
-
-    public List<String> getToken(String userId) {
-        return mongoTemplate.findOne(Query.query(Criteria.where("_id").is(userId)), User.class,"user").getFcmToken();
     }
 
     public void insertFCMToken(String userId, String fcmToken) {
