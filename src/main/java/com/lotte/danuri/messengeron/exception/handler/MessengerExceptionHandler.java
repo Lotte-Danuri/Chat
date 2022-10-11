@@ -2,6 +2,7 @@ package com.lotte.danuri.messengeron.exception.handler;
 
 import com.lotte.danuri.messengeron.exception.RoomDuplicationException;
 import com.lotte.danuri.messengeron.exception.RoomNotFoundException;
+import com.lotte.danuri.messengeron.exception.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -20,4 +21,10 @@ public class MessengerExceptionHandler {
     public ResponseEntity<String> roomDuplicationException(RoomDuplicationException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<String> userNotFoundException(UserNotFoundException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
 }

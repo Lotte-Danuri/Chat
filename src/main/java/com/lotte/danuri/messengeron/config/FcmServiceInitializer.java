@@ -18,7 +18,6 @@ public class FcmServiceInitializer {
         } catch (Exception e) {
             try {
                 String path = System.getProperty("user.home");
-                System.out.println(path+"/key/luxon-c4fb2-firebase-adminsdk-fl48h-e2292ae972.json");
                 FirebaseOptions options = FirebaseOptions.builder()
                         .setProjectId("luxon-c4fb2")
                         .setCredentials(GoogleCredentials.fromStream(new FileInputStream(path+"/key/luxon-c4fb2-firebase-adminsdk-fl48h-e2292ae972.json")))

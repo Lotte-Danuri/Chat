@@ -43,10 +43,15 @@ public class UserController {
 
     @PostMapping("")
     @ApiOperation(value = "createUser")
-    public ResponseEntity createUser(String userId, String fcmToken) {
-        userService.createUser(userId, fcmToken);
+    public ResponseEntity createUser(String userId) {
+        userService.createUser(userId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-
+    @PostMapping("/fcmToken")
+    @ApiOperation(value = "Insert FCMToken")
+    public ResponseEntity insertFCMToken(String userId,String fcmToken) {
+        userService.insertFCMToken(userId,fcmToken);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

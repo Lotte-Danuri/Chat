@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 
 @Repository
@@ -20,10 +21,10 @@ public class UserDao {
     @Autowired
     private MongoTemplate mongoTemplate;
 
-    public User createUser(String userId, String fcmToken) {
+    public User createUser(String userId) {
         User user = new User();
         user.setUserId(userId);
-        user.setFcmToken(fcmToken);
+        user.setFcmToken(new ArrayList<String>());
         user.setRoomList(new ArrayList<RoomData>());
         return mongoTemplate.insert(user, "user");
     }
@@ -81,7 +82,14 @@ public class UserDao {
         return mongoTemplate.exists(Query.query(Criteria.where("_id").is(userId)), "user");
     }
 
-    public String getToken(String userId) {
+    public List<String> getToken(String userId) {
         return mongoTemplate.findOne(Query.query(Criteria.where("_id").is(userId)), User.class,"user").getFcmToken();
+    }
+
+    public void insertFCMToken(String userId, String fcmToken) {
+        Query query = new Query(Criteria.where("_id").is(userId));
+        Update update = new Update();
+        update.push("fcmToken").each(fcmToken);
+        mongoTemplate.updateFirst(query, update,"user");
     }
 }

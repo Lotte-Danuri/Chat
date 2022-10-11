@@ -19,7 +19,7 @@ public class User {
     @Id
     private String userId;
 
-    private String fcmToken;
+    private ArrayList<String> fcmToken;
 
     private ArrayList<RoomData> roomList;
 
