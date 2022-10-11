@@ -5,11 +5,8 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Service;
 
 import java.io.FileInputStream;
-import java.io.IOException;
-
 
 @Configuration
 public class FcmServiceInitializer {
@@ -20,13 +17,12 @@ public class FcmServiceInitializer {
             FirebaseApp.getInstance();
         } catch (Exception e) {
             try {
-                String path = System.getProperty("user.dir");
-
-                FileInputStream serviceAccount = new FileInputStream(path
-                        + "/src/main/resources/firebase/luxon-c4fb2-firebase-adminsdk-fl48h-e2292ae972.json");
-
-                FirebaseOptions options = new FirebaseOptions.Builder()
-                        .setCredentials(GoogleCredentials.fromStream(serviceAccount)).build();
+                String path = System.getProperty("user.home");
+                System.out.println(path+"/key/luxon-c4fb2-firebase-adminsdk-fl48h-e2292ae972.json");
+                FirebaseOptions options = FirebaseOptions.builder()
+                        .setProjectId("luxon-c4fb2")
+                        .setCredentials(GoogleCredentials.fromStream(new FileInputStream(path+"/key/luxon-c4fb2-firebase-adminsdk-fl48h-e2292ae972.json")))
+                        .build();
 
                 FirebaseApp.initializeApp(options);
             } catch (Exception e1) {
