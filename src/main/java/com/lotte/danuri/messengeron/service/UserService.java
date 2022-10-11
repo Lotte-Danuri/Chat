@@ -3,7 +3,6 @@ package com.lotte.danuri.messengeron.service;
 
 import com.lotte.danuri.messengeron.exception.RoomDuplicationException;
 import com.lotte.danuri.messengeron.exception.RoomNotFoundException;
-import com.lotte.danuri.messengeron.model.dto.Chat;
 import com.lotte.danuri.messengeron.model.dto.ChatRoom;
 import com.lotte.danuri.messengeron.model.dto.RoomData;
 import com.lotte.danuri.messengeron.model.dto.User;
@@ -63,9 +62,9 @@ public class UserService{
     }
 
 
-    public User createUser(String userId, String fcmToken) {
+    public User createUser(String userId) {
         if(userDao.userExists(userId))throw new RoomDuplicationException("이미 존재하는 사용자 입니다.");
-        return userDao.createUser(userId, fcmToken);
+        return userDao.createUser(userId);
     }
 
     public List<RoomListVo> findUserDatasByUserId(String userId) {
@@ -78,8 +77,14 @@ public class UserService{
 
     }
 
-    private ArrayList<RoomData> getRoomList(String userId) {
-        return findUserByUserId(userId).getRoomList();
+    private ArrayList<RoomData> getRoomList(String userId){
+        try {
+            ArrayList<RoomData> roomDataList = findUserByUserId(userId).getRoomList();
+            return roomDataList;
+        }catch(RoomNotFoundException e){
+
+        }
+        return new ArrayList<RoomData>();
     }
 
 
@@ -87,7 +92,7 @@ public class UserService{
     public RoomData createChatRoom(String userId, String receiverId) {
 
         // 채팅방 생성
-        ObjectId chatRoomId = createUser();
+        ObjectId chatRoomId = createRoom();
 
         //반는 사람에게 방정보 주기
         userDao.createChatRoom(receiverId, userId, chatRoomId);
@@ -98,7 +103,7 @@ public class UserService{
         return new RoomData(chatRoomId, receiverId, LocalDateTime.now());
     }
 
-    public ObjectId createUser(){
+    public ObjectId createRoom(){
         ChatRoom chatRoom = new ChatRoom();
         chatRoom.setRoomType("chat");
         chatRoom.setValid(true);
@@ -119,4 +124,7 @@ public class UserService{
     }
 
 
+    public void insertFCMToken(String userId, String fcmToken) {
+        userDao.insertFCMToken(userId,fcmToken);
+    }
 }

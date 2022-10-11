@@ -82,6 +82,8 @@ public class ChatRoomService {
     }
 
     public void sendMessage(Chat chat, String snedTo) throws FirebaseMessagingException {
-        FCMUtil.sendMessage(userDao.findUserByUserId(snedTo).getFcmToken(), chat);
+        List<String> fcm = userDao.findUserByUserId(snedTo).getFcmToken();
+        if (!fcm.isEmpty()) FCMUtil.sendMessages(fcm, chat);
+
     }
 }
