@@ -21,6 +21,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("chatRoom")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ChatRoomController {
 
     @Autowired

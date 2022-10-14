@@ -17,6 +17,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("user")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class UserController {
 
 
@@ -25,7 +26,7 @@ public class UserController {
     @GetMapping(value = "/{userId}",produces = {MediaType.APPLICATION_JSON_VALUE})
     @ApiOperation(value = "findRoomDatasByUserId")
     public ResponseEntity<List<RoomListVo>> findRoomDatasByUserId(@PathVariable final String userId) {
-        return new ResponseEntity<>(userService.findUserDatasByUserId(userId), HttpStatus.OK);
+        return new ResponseEntity<>(userService.findRoomDatasByUserId(userId), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{userId}/{receiverId}" ,produces = {MediaType.APPLICATION_JSON_VALUE})

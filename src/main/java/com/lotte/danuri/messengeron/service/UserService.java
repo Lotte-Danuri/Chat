@@ -60,13 +60,13 @@ public class UserService {
         userDao.createUser(userId);
     }
 
-    public List<RoomListVo> findUserDatasByUserId(String userId) {
+    public List<RoomListVo> findRoomDatasByUserId(String userId) {
         List<RoomListVo> chatRoomList = new ArrayList<>();
 
         for (RoomData roomData : getRoomList(userId)) {
             chatRoomList.add(new RoomListVo(chatDao.findChatRoomData(roomData.getChatRoomId()), roomData.getReceiverId(), chatDao.getCountNewChats(roomData.getChatRoomId(), roomData.getLastWatched())));
         }
-        return chatRoomList.stream().sorted((o1, o2) -> o2.getChatRoom().getUpdateAt().compareTo(o1.getChatRoom().getUpdateAt())).toList();
+        return chatRoomList.stream().sorted((o1, o2) -> o2.getUpdateAt().compareTo(o1.getUpdateAt())).toList();
 
     }
 
