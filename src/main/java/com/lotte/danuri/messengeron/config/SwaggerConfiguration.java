@@ -32,7 +32,7 @@ public class SwaggerConfiguration {
 
     private ApiInfo apiInfo(){
         return new ApiInfoBuilder()
-                .title("Review API")
+                .title("Chat API")
                 .description("Chat 관련 API")
                 .version("1.0")
                 .build();

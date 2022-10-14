@@ -2,7 +2,6 @@ package com.lotte.danuri.messengeron.repository;
 
 import com.lotte.danuri.messengeron.model.dto.Chat;
 import com.lotte.danuri.messengeron.model.dto.ChatRoom;
-import com.lotte.danuri.messengeron.model.dto.User;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -60,9 +59,7 @@ public class ChatDao {
 
         ChatRoom chatRoom = mongoTemplate.findOne(query, ChatRoom.class, "chatRoom");
 
-        Optional<List<Chat>> chatList = Optional.ofNullable(chatRoom.getChatList());
-
-        return chatList;
+        return  Optional.ofNullable(chatRoom.getChatList());
     }
 
     public Optional<List<Chat>> getNewChats(ObjectId roomId, LocalDateTime lastWatched) {
@@ -71,7 +68,7 @@ public class ChatDao {
         Query query = Query.query(Criteria.where("_id").is(roomId));
         query.fields().include("chatList").exclude("_id");
         List<Chat> msgs = mongoTemplate.findOne(query, ChatRoom.class, "chatRoom").getChatList();
-        if(msgs.size() == 0) {
+        if(msgs.isEmpty()) {
             return Optional.of(reChats);
         }
         ListIterator<Chat> ll = msgs.listIterator(msgs.size());

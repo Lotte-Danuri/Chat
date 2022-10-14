@@ -1,8 +1,6 @@
 package com.lotte.danuri.messengeron.service;
 
-import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
-import com.google.firebase.messaging.Message;
 import com.lotte.danuri.messengeron.model.dto.Chat;
 import com.lotte.danuri.messengeron.repository.UserDao;
 import com.lotte.danuri.messengeron.util.FCMUtil;
@@ -10,7 +8,6 @@ import com.lotte.danuri.messengeron.util.S3Upload;
 import com.lotte.danuri.messengeron.repository.ChatDao;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,29 +21,20 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ChatRoomService {
 
-    @Autowired
-
     private final S3Upload s3Upload;
 
-    @Autowired
-    private ChatDao chatDao;
-    @Autowired
+    private final ChatDao chatDao;
 
-    private UserService userService;
 
-    @Autowired
-    private UserDao userDao;
+    private final UserService userService;
+
+
+    private final UserDao userDao;
 
     //메세지 보내기
     public void pushChat(ObjectId chatRoomId, String snedTo, Chat chat) throws FirebaseMessagingException {
         chatDao.pushChat(chatRoomId, chat);
         sendMessage(chat, snedTo);
-    }
-
-
-    //채팅방 유효성 확인    @Override
-    public boolean validChat(ObjectId chatRoomId) {
-        return chatDao.validChat(chatRoomId);
     }
 
     public void pushChats(List<String> userId, Chat chat) throws FirebaseMessagingException {

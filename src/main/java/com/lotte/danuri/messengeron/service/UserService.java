@@ -11,31 +11,24 @@ import com.lotte.danuri.messengeron.repository.ChatDao;
 import com.lotte.danuri.messengeron.repository.UserDao;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
-@Transactional
-public class UserService{
+public class UserService {
 
-    @Autowired
-    private ChatDao chatDao;
-    @Autowired
-    private UserDao userDao;
+    private final ChatDao chatDao;
+    private final UserDao userDao;
 
     public User findUserByUserId(String userId) {
         return userDao.findUserByUserId(userId);
     }
 
-    //상대방과 채팅할 수 있는 방정보 확인 후 방정보 리턴
     public RoomData findRoomIdByUserId(String userId, String receiverId) {
         if (userDao.validUser(userId) && userDao.validUser(receiverId)) {
 
@@ -51,40 +44,38 @@ public class UserService{
                     if (chatDao.validChat(roomData.getChatRoomId()))
                         return roomData;
 
-                    else return createChatRoom(userId, receiverId);
+                else return createChatRoom(userId, receiverId);
 
             }
             return createChatRoom(userId, receiverId);
-        }else{
+        } else {
             throw new RoomNotFoundException("존재하지 않는 사용자 입니다.");
         }
 
     }
 
 
-    public User createUser(String userId) {
-        if(userDao.userExists(userId))throw new RoomDuplicationException("이미 존재하는 사용자 입니다.");
-        return userDao.createUser(userId);
+    public void createUser(String userId) {
+        if (userDao.userExists(userId)) throw new RoomDuplicationException("이미 존재하는 사용자 입니다.");
+        userDao.createUser(userId);
     }
 
-    public List<RoomListVo> findUserDatasByUserId(String userId) {
+    public List<RoomListVo> findRoomDatasByUserId(String userId) {
         List<RoomListVo> chatRoomList = new ArrayList<>();
 
-        for(RoomData roomData : getRoomList(userId)) {
+        for (RoomData roomData : getRoomList(userId)) {
             chatRoomList.add(new RoomListVo(chatDao.findChatRoomData(roomData.getChatRoomId()), roomData.getReceiverId(), chatDao.getCountNewChats(roomData.getChatRoomId(), roomData.getLastWatched())));
         }
-        return chatRoomList.stream().sorted((o1, o2) -> o2.getChatRoom().getUpdateAt().compareTo(o1.getChatRoom().getUpdateAt())).collect(Collectors.toList());
+        return chatRoomList.stream().sorted((o1, o2) -> o2.getUpdateAt().compareTo(o1.getUpdateAt())).toList();
 
     }
 
-    private ArrayList<RoomData> getRoomList(String userId){
+    private ArrayList<RoomData> getRoomList(String userId) {
         try {
-            ArrayList<RoomData> roomDataList = findUserByUserId(userId).getRoomList();
-            return roomDataList;
-        }catch(RoomNotFoundException e){
-
+            return findUserByUserId(userId).getRoomList();
+        } catch (RoomNotFoundException e) {
+            return new ArrayList<>();
         }
-        return new ArrayList<RoomData>();
     }
 
 
@@ -103,7 +94,7 @@ public class UserService{
         return new RoomData(chatRoomId, receiverId, LocalDateTime.now());
     }
 
-    public ObjectId createRoom(){
+    public ObjectId createRoom() {
         ChatRoom chatRoom = new ChatRoom();
         chatRoom.setRoomType("chat");
         chatRoom.setValid(true);
@@ -119,12 +110,7 @@ public class UserService{
         userDao.deleteRoomData(userId, roomId);
     }
 
-    public void updateRoomDataLastWatch(String userId, ObjectId roomId) {
-        userDao.updateRoomDataLastWatch(userId, roomId);
-    }
-
-
     public void insertFCMToken(String userId, String fcmToken) {
-        userDao.insertFCMToken(userId,fcmToken);
+        userDao.insertFCMToken(userId, fcmToken);
     }
 }
