@@ -19,11 +19,8 @@ public class UserDao {
     @Autowired
     private MongoTemplate mongoTemplate;
 
-    public void createUser(String userId) {
-        User user = new User();
-        user.setUserId(userId);
-        user.setFcmToken(new ArrayList<>());
-        user.setRoomList(new ArrayList<>());
+    public void createUser(String userId, String userName) {
+        User user = new User(userId, userName ,new ArrayList<>(),new ArrayList<>());
         mongoTemplate.insert(user, "user");
     }
 

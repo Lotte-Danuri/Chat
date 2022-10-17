@@ -2,6 +2,7 @@ package com.lotte.danuri.messengeron.repository;
 
 import com.lotte.danuri.messengeron.model.dto.Chat;
 import com.lotte.danuri.messengeron.model.dto.ChatRoom;
+import com.lotte.danuri.messengeron.model.dto.User;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -110,4 +111,7 @@ public class ChatDao {
     }
 
 
+    public String getUserName(String userId) {
+        return mongoTemplate.findOne(Query.query(Criteria.where("_id").is(userId)), User.class, "user").getUserName();
+    }
 }
