@@ -55,16 +55,16 @@ public class UserService {
     }
 
 
-    public void createUser(String userId) {
+    public void createUser(String userId, String userName) {
         if (userDao.userExists(userId)) throw new RoomDuplicationException("이미 존재하는 사용자 입니다.");
-        userDao.createUser(userId);
+        userDao.createUser(userId, userName);
     }
 
     public List<RoomListVo> findRoomDatasByUserId(String userId) {
         List<RoomListVo> chatRoomList = new ArrayList<>();
 
         for (RoomData roomData : getRoomList(userId)) {
-            chatRoomList.add(new RoomListVo(chatDao.findChatRoomData(roomData.getChatRoomId()), roomData.getReceiverId(), chatDao.getCountNewChats(roomData.getChatRoomId(), roomData.getLastWatched())));
+            chatRoomList.add(new RoomListVo(chatDao.findChatRoomData(roomData.getChatRoomId()), roomData.getReceiverId(),chatDao.getUserName(userId), chatDao.getCountNewChats(roomData.getChatRoomId(), roomData.getLastWatched())));
         }
         return chatRoomList.stream().sorted((o1, o2) -> o2.getUpdateAt().compareTo(o1.getUpdateAt())).toList();
 

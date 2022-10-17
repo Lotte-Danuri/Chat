@@ -38,8 +38,8 @@ public class UserController {
 
     @PostMapping(value = "" ,produces = {MediaType.APPLICATION_JSON_VALUE})
     @ApiOperation(value = "createUser")
-    public ResponseEntity createUser(String userId) {
-        userService.createUser(userId);
+    public ResponseEntity createUser(String userId, String userName) {
+        userService.createUser(userId, userName);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
