@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -38,15 +39,15 @@ public class UserController {
 
     @PostMapping(value = "" ,produces = {MediaType.APPLICATION_JSON_VALUE})
     @ApiOperation(value = "createUser")
-    public ResponseEntity createUser(String userId, String userName) {
-        userService.createUser(userId, userName);
+    public ResponseEntity createUser(@RequestBody HashMap<String, String> map) {
+        userService.createUser(map.get("userId"),map.get("userName"));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping(value = "/fcmToken" ,produces = {MediaType.APPLICATION_JSON_VALUE})
     @ApiOperation(value = "Insert FCMToken")
-    public ResponseEntity insertFCMToken(String userId,String fcmToken) {
-        userService.insertFCMToken(userId,fcmToken);
+    public ResponseEntity insertFCMToken(@RequestBody HashMap<String,String> map) {
+        userService.insertFCMToken(map.get("userId"),map.get("fcmToken"));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

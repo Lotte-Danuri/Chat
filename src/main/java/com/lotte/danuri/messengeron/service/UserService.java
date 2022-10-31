@@ -64,7 +64,7 @@ public class UserService {
         List<RoomListVo> chatRoomList = new ArrayList<>();
 
         for (RoomData roomData : getRoomList(userId)) {
-            chatRoomList.add(new RoomListVo(chatDao.findChatRoomData(roomData.getChatRoomId()), roomData.getReceiverId(),chatDao.getUserName(userId), chatDao.getCountNewChats(roomData.getChatRoomId(), roomData.getLastWatched())));
+            chatRoomList.add(new RoomListVo(chatDao.findChatRoomData(roomData.getChatRoomId()), roomData.getReceiverId(),chatDao.getUserName(roomData.getReceiverId()), chatDao.getCountNewChats(roomData.getChatRoomId(), roomData.getLastWatched())));
         }
         return chatRoomList.stream().sorted((o1, o2) -> o2.getUpdateAt().compareTo(o1.getUpdateAt())).toList();
 
