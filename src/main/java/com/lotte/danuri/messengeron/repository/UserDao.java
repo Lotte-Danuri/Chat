@@ -81,6 +81,6 @@ public class UserDao {
         Query query = new Query(Criteria.where("_id").is(userId));
         Update update = new Update();
         update.push("fcmToken").each(fcmToken);
-        mongoTemplate.updateFirst(query, update,"user");
+        mongoTemplate.upsert(query, update,"user");
     }
 }
