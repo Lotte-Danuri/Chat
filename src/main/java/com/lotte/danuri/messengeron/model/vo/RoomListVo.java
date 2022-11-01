@@ -50,8 +50,6 @@ public class RoomListVo {
 
     private String receiverId;
 
-    private String UserId;
-
     private int countNewChats;
 
 }

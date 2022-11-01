@@ -5,6 +5,7 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 
 import java.io.FileInputStream;
 
@@ -17,10 +18,9 @@ public class FcmServiceInitializer {
             FirebaseApp.getInstance();
         } catch (Exception e) {
             try {
-                String path = System.getProperty("user.home");
                 FirebaseOptions options = FirebaseOptions.builder()
                         .setProjectId("luxon-c4fb2")
-                        .setCredentials(GoogleCredentials.fromStream(new FileInputStream(path+"/key/luxon-c4fb2-firebase-adminsdk-fl48h-e2292ae972.json")))
+                        .setCredentials(GoogleCredentials.fromStream(new ClassPathResource("google-service.json").getInputStream()))
                         .build();
 
                 FirebaseApp.initializeApp(options);

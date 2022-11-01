@@ -1,5 +1,5 @@
 **/application.properties
-**/luxon-c4fb2-firebase-adminsdk-fl48h-e2292ae972.json
+**/google-service.json
 HELP.md
 .gradle
 build/
@@ -213,3 +213,4 @@ gradle-app.setting
 
 # End of https://www.toptal.com/developers/gitignore/api/macos,windows,gradle,java,intellij
 
+/src/main/resources/google-service.json

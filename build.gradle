@@ -37,7 +37,6 @@ dependencies {
 	implementation group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.12.303'
 
 	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
-	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 
 }
 
