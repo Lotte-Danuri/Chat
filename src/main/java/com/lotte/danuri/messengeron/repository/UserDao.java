@@ -20,7 +20,7 @@ public class UserDao {
     private MongoTemplate mongoTemplate;
 
     public void createUser(String userId, String userName) {
-        User user = new User(userId, userName ,new ArrayList<>(),new ArrayList<>());
+        User user = new User(userId, userName ,new ArrayList<String>(),new ArrayList<RoomData>());
         mongoTemplate.insert(user, "user");
     }
 
