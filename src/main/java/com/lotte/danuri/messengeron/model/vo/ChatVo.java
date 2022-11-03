@@ -8,8 +8,6 @@ import java.time.LocalDateTime;
 
 @Getter
 @AllArgsConstructor
-@RequiredArgsConstructor
-@NoArgsConstructor
 public class ChatVo {
 
     private String contentType;
