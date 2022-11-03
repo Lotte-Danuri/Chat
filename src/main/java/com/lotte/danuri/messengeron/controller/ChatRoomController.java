@@ -28,6 +28,7 @@ public class ChatRoomController {
     @Autowired
     ChatRoomService chatRoomService;
 
+    @Autowired
     UserService userService;
 
     @PostMapping(value = "chat",produces = {MediaType.APPLICATION_JSON_VALUE})
