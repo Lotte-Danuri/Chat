@@ -5,6 +5,7 @@ import com.lotte.danuri.messengeron.model.dto.Chat;
 import com.lotte.danuri.messengeron.model.vo.ChatVo;
 import com.lotte.danuri.messengeron.model.vo.ChatsVo;
 import com.lotte.danuri.messengeron.service.ChatRoomService;
+import com.lotte.danuri.messengeron.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
@@ -27,11 +28,19 @@ public class ChatRoomController {
     @Autowired
     ChatRoomService chatRoomService;
 
+    UserService userService;
 
     @PostMapping(value = "chat",produces = {MediaType.APPLICATION_JSON_VALUE})
     @ApiOperation(value = "sendChat")
     ResponseEntity pushChat(@RequestBody ChatVo vo) throws FirebaseMessagingException {
-        chatRoomService.pushChat(vo.getChatRoomId(), vo.getSendTo(), vo.getChat());
+        ObjectId id;
+        if (vo.getId() == null) {
+           id = userService.findRoomIdByUserId(vo.getSendTo(), vo.getSendBy()).getChatRoomId();
+        } else {
+            id= new ObjectId(vo.getId());
+        }
+
+        chatRoomService.pushChat(id, vo.getSendTo(), vo.getChat());
         return new ResponseEntity(HttpStatus.CREATED);
     }
 
@@ -60,7 +69,14 @@ public class ChatRoomController {
     ResponseEntity pushImage(@RequestPart ChatVo chatVo, @RequestPart MultipartFile imageFile) throws FirebaseMessagingException {
         Chat chat = chatVo.getChat();
         chat.setSource(chatRoomService.pushImage(imageFile));
-        chatRoomService.pushChat(chatVo.getChatRoomId(),chatVo.getSendTo(),chat);
+        ObjectId id;
+        if (chatVo.getId() == null) {
+            id = userService.findRoomIdByUserId(chatVo.getSendTo(), chatVo.getSendBy()).getChatRoomId();
+        } else {
+            id= new ObjectId(chatVo.getId());
+        }
+
+        chatRoomService.pushChat(id,chatVo.getSendTo(),chat);
         return new ResponseEntity(HttpStatus.CREATED);
     }
 }
