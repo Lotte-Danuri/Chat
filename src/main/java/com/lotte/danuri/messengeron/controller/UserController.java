@@ -51,10 +51,10 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping(value = "/{userId}",produces = {MediaType.APPLICATION_JSON_VALUE})
+    @DeleteMapping(value = "/{userId}/{roomId}",produces = {MediaType.APPLICATION_JSON_VALUE})
     @ApiOperation(value = "deleteRoomData")
-    public ResponseEntity deleteRoomData(@PathVariable final String userId, @RequestParam final ObjectId roomId) {
-        userService.deleteRoomData(userId, roomId);
+    public ResponseEntity deleteRoomData(@PathVariable final String userId,@PathVariable final String roomId) {
+        userService.deleteRoomData(userId, new ObjectId(roomId));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
