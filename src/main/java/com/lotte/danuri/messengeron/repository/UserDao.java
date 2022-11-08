@@ -9,8 +9,10 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 
 @Repository
@@ -79,8 +81,11 @@ public class UserDao {
 
     public void insertFCMToken(String userId, String fcmToken) {
         Query query = new Query(Criteria.where("_id").is(userId));
-        Update update = new Update();
-        update.push("fcmToken").each(fcmToken);
-        mongoTemplate.upsert(query, update,"user");
+        ArrayList<String> fcms = mongoTemplate.findOne(Query.query(Criteria.where("_id").is(userId)),User.class,"user").getFcmToken();
+        if(!Arrays.asList(fcms).contains(fcmToken)) {
+            Update update = new Update();
+            update.push("fcmToken").each(fcmToken);
+            mongoTemplate.upsert(query, update, "user");
+        }
     }
 }

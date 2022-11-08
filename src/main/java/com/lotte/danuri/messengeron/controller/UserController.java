@@ -10,17 +10,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.HashMap;
 import java.util.List;
-
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("user")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class UserController {
-
 
     private final UserService userService;
 
@@ -34,7 +31,6 @@ public class UserController {
     @ApiOperation(value = "findRoomIdByUserId" )
     ResponseEntity<RoomData> findRoomIdByUserId(@PathVariable final String userId, @PathVariable final String receiverId) {
         return new ResponseEntity<>(userService.findRoomIdByUserId(userId, receiverId), HttpStatus.OK);
-
     }
 
     @PostMapping(value = "" ,produces = {MediaType.APPLICATION_JSON_VALUE})
