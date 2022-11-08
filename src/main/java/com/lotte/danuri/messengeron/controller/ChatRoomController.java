@@ -40,7 +40,6 @@ public class ChatRoomController {
         } else {
             id= new ObjectId(vo.getId());
         }
-
         chatRoomService.pushChat(id, vo.getSendTo(), vo.getChat());
         return new ResponseEntity(HttpStatus.CREATED);
     }
