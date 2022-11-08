@@ -82,7 +82,7 @@ public class UserDao {
     public void insertFCMToken(String userId, String fcmToken) {
         Query query = new Query(Criteria.where("_id").is(userId));
         ArrayList<String> fcms = mongoTemplate.findOne(Query.query(Criteria.where("_id").is(userId)),User.class,"user").getFcmToken();
-        if(!Arrays.asList(fcms).contains(fcmToken)) {
+        if(!fcms.contains(fcmToken)) {
             Update update = new Update();
             update.push("fcmToken").each(fcmToken);
             mongoTemplate.upsert(query, update, "user");
